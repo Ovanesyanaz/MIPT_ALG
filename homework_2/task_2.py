@@ -1,21 +1,19 @@
 def topological_sort(graph: list[list[int]]):
     visit = [False] * len(graph)
     order = []
-    arr = list(range(len(graph)))
-    while len(arr) != 0:
-        if visit[arr[0]] == 1:
-            arr.pop(0)
-            continue
-        flag = False
-        for i in graph[arr[0]]:
-            if visit[i] == 0:
-                flag = True
-                break
-        if flag:
-            arr.append(arr.pop(0))
-        else:
-            order.append(arr[0])
-            visit[arr[0]] = 1
+
+    def dfs(vertex: int):
+        visit[vertex] = True
+        for u in graph[vertex]:
+            if not visit[u]:
+                dfs(u)
+        
+        order.append(vertex)
+    
+    for vertex in range(len(graph)):
+        if not visit[vertex]:
+            dfs(vertex)
+    
     return order[::-1]
 
 vertices = [
